@@ -33,9 +33,11 @@
           }
         }
       );
-      $('.accordion').accordion();
+      $('.accordion').accordion({ active: false });
     });
   </script>
+  
+  <%= stylesheet_link_tag "http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" %>
 
   <style type="text/css">
     ul.products_ul {
