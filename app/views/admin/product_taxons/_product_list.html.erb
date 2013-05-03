@@ -1,9 +1,9 @@
 <ul class="products_ul">
 <%
   if taxon.id
-    products = taxon.products.has_stock?
+    products = taxon.products.available.on_hand
   else
-    products = Product.has_stock?
+    products = Product.available.on_hand
   end
   
   #collect the pts for this taxon from each product 
