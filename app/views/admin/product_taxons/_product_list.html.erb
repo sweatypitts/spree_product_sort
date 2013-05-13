@@ -1,9 +1,13 @@
 <ul class="products_ul">
 <%
   if taxon.id
-    product_taxons = taxon.product_taxons.includes(:product => :variants).where("products.available_on <= ? and products.count_on_hand > 0", Time.zone.now)
+    product_taxons = taxon.product_taxons.includes(:product => :variants).
+      where("products.available_on <= ? and products.count_on_hand > 0", Time.zone.now).
+      where("products.deleted_at is NULL")
   else
-    product_taxons = ProductTaxon.where(:taxon_id => 0).includes(:product => :variants).where("products.available_on <= ? and products.count_on_hand > 0", Time.zone.now)
+    product_taxons = ProductTaxon.where(:taxon_id => 0).includes(:product => :variants).
+      where("products.available_on <= ? and products.count_on_hand > 0", Time.zone.now).
+      where("products.deleted_at is NULL")
   end
 %>
 
