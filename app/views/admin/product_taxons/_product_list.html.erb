@@ -1,19 +1,17 @@
 <ul class="products_ul">
 <%
   if taxon.id
-    products = taxon.products.available.on_hand
+    product_taxons = taxon.product_taxons.includes(:product => :variants).where("products.available_on <= ? and products.count_on_hand > 0", Time.zone.now)
   else
-    products = Product.available.on_hand
+    product_taxons = ProductTaxon.where(:taxon_id => 0).includes(:product => :variants).where("products.available_on <= ? and products.count_on_hand > 0", Time.zone.now)
   end
-  
-  #collect the pts for this taxon from each product 
-  product_taxons = products.collect {|p| p.product_taxons.where(:taxon_id => taxon.id || 0).first }
 %>
 
 <% product_taxons.each do |pt| %>
+  <% next unless pt.product %>
   <li id="product_taxons_<%=pt.id%>">
    <span class="handle">≡</span>
-   <%= h pt.product.name %>
+   <%= h pt.product.name %> <div style='float:right'><%= h(pt.product.variants.collect {|v| v.count_on_hand }.join(' / ')) %> <%= h(pt.product.count_on_hand) if pt.product.variants.empty? %> </div>
   </li>
 <% end %>
 </ul>
